@@ -1,94 +1,4497 @@
 {
   "openapi": "3.1.0",
   "info": {
-    "title": "OpenAPI Plant Store",
-    "description": "A sample API that uses a plant store as an example to demonstrate features in the OpenAPI specification",
-    "license": {
-      "name": "MIT"
-    },
-    "version": "1.0.0"
+    "version": "1.0.0",
+    "title": "Slashpage API",
+    "description": "### This is the open API for Slashpage"
   },
   "servers": [
     {
-      "url": "http://sandbox.mintlify.com"
+      "url": "https://api.slashpage.com/v1",
+      "description": "Production"
     }
   ],
   "security": [
     {
-      "bearerAuth": []
+      "httpBearer": []
     }
   ],
+  "components": {
+    "securitySchemes": {
+      "ApiKeyAuth": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "x-api-key",
+        "description": "Your token here"
+      }
+    },
+    "schemas": {
+      "User": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "nickname": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "profileImage": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "nickname",
+          "email"
+        ],
+        "description": "User object",
+        "example": {
+          "id": "1234567890",
+          "nickname": "User Nickname",
+          "email": "user@example.com",
+          "profileImage": "https://example.com/profile.jpg"
+        }
+      },
+      "UserWithRole": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "nickname": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "profileImage": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "OWNER",
+              "MANAGER",
+              "COEDITOR",
+              "MEMBER",
+              "READER"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "nickname",
+          "email",
+          "role"
+        ],
+        "description": "User object with the role property",
+        "example": {
+          "id": "1234567890",
+          "nickname": "User Nickname",
+          "email": "user@example.com",
+          "profileImage": "https://example.com/profile.jpg",
+          "role": "OWNER"
+        }
+      },
+      "Domain": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "displayName": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          },
+          "favicon": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date"
+          }
+        },
+        "required": [
+          "name",
+          "displayName",
+          "url",
+          "createdAt",
+          "updatedAt"
+        ],
+        "additionalProperties": false,
+        "description": "Domain object",
+        "example": {
+          "name": "slashpage",
+          "displayName": "Slashpage",
+          "url": "https://slashpage.com/slashpage"
+        }
+      },
+      "Channel": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "fields": {
+            "type": "array",
+            "items": {
+              "anyOf": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "description": "id"
+                    },
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "text",
+                        "long-text",
+                        "number",
+                        "checkbox",
+                        "multi-checkbox",
+                        "select",
+                        "multi-select",
+                        "choice",
+                        "person",
+                        "date",
+                        "email",
+                        "phone",
+                        "url",
+                        "rating",
+                        "vote",
+                        "relation",
+                        "duration",
+                        "file",
+                        "image",
+                        "formula",
+                        "rollup",
+                        "status",
+                        "category",
+                        "assignee",
+                        "id",
+                        "created-by",
+                        "created-at",
+                        "updated-at",
+                        "device-id",
+                        "ip-address",
+                        "started-at",
+                        "submitted-at",
+                        "completion-time"
+                      ],
+                      "description": "커스텀 필드 타입"
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "이름"
+                    },
+                    "restricted": {
+                      "type": "boolean",
+                      "description": "제한 여부"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "type"
+                  ],
+                  "additionalProperties": {}
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "description": "id"
+                    },
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "text",
+                        "long-text",
+                        "number",
+                        "checkbox",
+                        "multi-checkbox",
+                        "select",
+                        "multi-select",
+                        "choice",
+                        "person",
+                        "date",
+                        "email",
+                        "phone",
+                        "url",
+                        "rating",
+                        "vote",
+                        "relation",
+                        "duration",
+                        "file",
+                        "image",
+                        "formula",
+                        "rollup",
+                        "status",
+                        "category",
+                        "assignee",
+                        "id",
+                        "created-by",
+                        "created-at",
+                        "updated-at",
+                        "device-id",
+                        "ip-address",
+                        "started-at",
+                        "submitted-at",
+                        "completion-time"
+                      ],
+                      "description": "커스텀 필드 타입"
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "이름"
+                    },
+                    "restricted": {
+                      "type": "boolean",
+                      "description": "제한 여부"
+                    },
+                    "select": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "description": "선택 타입 옵션 id"
+                          },
+                          "name": {
+                            "type": "string",
+                            "description": "선택 타입 옵션 이름"
+                          },
+                          "color": {
+                            "type": "string",
+                            "enum": [
+                              "tb01",
+                              "tb02",
+                              "tb03",
+                              "tb04",
+                              "tb05",
+                              "tb06",
+                              "tb07",
+                              "tb08",
+                              "tb09",
+                              "tb10",
+                              "tb11"
+                            ],
+                            "description": "커스텀 필드 선택 타입 옵션 색상"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "name"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "type",
+                    "select"
+                  ],
+                  "additionalProperties": {},
+                  "description": "Select 커스텀 필드"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "description": "id"
+                    },
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "text",
+                        "long-text",
+                        "number",
+                        "checkbox",
+                        "multi-checkbox",
+                        "select",
+                        "multi-select",
+                        "choice",
+                        "person",
+                        "date",
+                        "email",
+                        "phone",
+                        "url",
+                        "rating",
+                        "vote",
+                        "relation",
+                        "duration",
+                        "file",
+                        "image",
+                        "formula",
+                        "rollup",
+                        "status",
+                        "category",
+                        "assignee",
+                        "id",
+                        "created-by",
+                        "created-at",
+                        "updated-at",
+                        "device-id",
+                        "ip-address",
+                        "started-at",
+                        "submitted-at",
+                        "completion-time"
+                      ],
+                      "description": "커스텀 필드 타입"
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "이름"
+                    },
+                    "restricted": {
+                      "type": "boolean",
+                      "description": "제한 여부"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "type"
+                  ],
+                  "additionalProperties": {},
+                  "description": "Text 커스텀 필드"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "description": "id"
+                    },
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "text",
+                        "long-text",
+                        "number",
+                        "checkbox",
+                        "multi-checkbox",
+                        "select",
+                        "multi-select",
+                        "choice",
+                        "person",
+                        "date",
+                        "email",
+                        "phone",
+                        "url",
+                        "rating",
+                        "vote",
+                        "relation",
+                        "duration",
+                        "file",
+                        "image",
+                        "formula",
+                        "rollup",
+                        "status",
+                        "category",
+                        "assignee",
+                        "id",
+                        "created-by",
+                        "created-at",
+                        "updated-at",
+                        "device-id",
+                        "ip-address",
+                        "started-at",
+                        "submitted-at",
+                        "completion-time"
+                      ],
+                      "description": "커스텀 필드 타입"
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "이름"
+                    },
+                    "restricted": {
+                      "type": "boolean",
+                      "description": "제한 여부"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "type"
+                  ],
+                  "additionalProperties": {},
+                  "description": "Number 커스텀 필드"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "description": "id"
+                    },
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "text",
+                        "long-text",
+                        "number",
+                        "checkbox",
+                        "multi-checkbox",
+                        "select",
+                        "multi-select",
+                        "choice",
+                        "person",
+                        "date",
+                        "email",
+                        "phone",
+                        "url",
+                        "rating",
+                        "vote",
+                        "relation",
+                        "duration",
+                        "file",
+                        "image",
+                        "formula",
+                        "rollup",
+                        "status",
+                        "category",
+                        "assignee",
+                        "id",
+                        "created-by",
+                        "created-at",
+                        "updated-at",
+                        "device-id",
+                        "ip-address",
+                        "started-at",
+                        "submitted-at",
+                        "completion-time"
+                      ],
+                      "description": "커스텀 필드 타입"
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "이름"
+                    },
+                    "restricted": {
+                      "type": "boolean",
+                      "description": "제한 여부"
+                    },
+                    "color": {
+                      "type": "string",
+                      "description": "색상"
+                    },
+                    "shape": {
+                      "type": "string",
+                      "enum": [
+                        "star",
+                        "heart"
+                      ],
+                      "description": "모양"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "type"
+                  ],
+                  "additionalProperties": {}
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "description": "id"
+                    },
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "text",
+                        "long-text",
+                        "number",
+                        "checkbox",
+                        "multi-checkbox",
+                        "select",
+                        "multi-select",
+                        "choice",
+                        "person",
+                        "date",
+                        "email",
+                        "phone",
+                        "url",
+                        "rating",
+                        "vote",
+                        "relation",
+                        "duration",
+                        "file",
+                        "image",
+                        "formula",
+                        "rollup",
+                        "status",
+                        "category",
+                        "assignee",
+                        "id",
+                        "created-by",
+                        "created-at",
+                        "updated-at",
+                        "device-id",
+                        "ip-address",
+                        "started-at",
+                        "submitted-at",
+                        "completion-time"
+                      ],
+                      "description": "커스텀 필드 타입"
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "이름"
+                    },
+                    "restricted": {
+                      "type": "boolean",
+                      "description": "제한 여부"
+                    },
+                    "date": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      },
+                      "minItems": 1,
+                      "maxItems": 2,
+                      "description": "날짜"
+                    },
+                    "hasTime": {
+                      "type": "boolean",
+                      "description": "시간 표시 여부"
+                    },
+                    "timeZone": {
+                      "type": "string",
+                      "description": "시간대"
+                    },
+                    "backgroundColor": {
+                      "type": "string",
+                      "description": "배경색"
+                    },
+                    "format": {
+                      "type": "object",
+                      "properties": {
+                        "date": {
+                          "type": "object",
+                          "properties": {
+                            "type": {
+                              "type": "string",
+                              "enum": [
+                                "full",
+                                "ymd",
+                                "mdy",
+                                "dmy"
+                              ],
+                              "description": "커스텀 필드 날짜 타입"
+                            },
+                            "time": {
+                              "type": "boolean",
+                              "description": "시간 표시 여부"
+                            },
+                            "is24": {
+                              "type": "boolean",
+                              "description": "24시간 표시 여부"
+                            }
+                          },
+                          "required": [
+                            "type"
+                          ],
+                          "description": "커스텀 필드 날짜 표시 형식"
+                        }
+                      },
+                      "description": "커스텀 필드 표시 형식"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "type"
+                  ],
+                  "additionalProperties": {}
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "description": "id"
+                    },
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "text",
+                        "long-text",
+                        "number",
+                        "checkbox",
+                        "multi-checkbox",
+                        "select",
+                        "multi-select",
+                        "choice",
+                        "person",
+                        "date",
+                        "email",
+                        "phone",
+                        "url",
+                        "rating",
+                        "vote",
+                        "relation",
+                        "duration",
+                        "file",
+                        "image",
+                        "formula",
+                        "rollup",
+                        "status",
+                        "category",
+                        "assignee",
+                        "id",
+                        "created-by",
+                        "created-at",
+                        "updated-at",
+                        "device-id",
+                        "ip-address",
+                        "started-at",
+                        "submitted-at",
+                        "completion-time"
+                      ],
+                      "description": "커스텀 필드 타입"
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "이름"
+                    },
+                    "restricted": {
+                      "type": "boolean",
+                      "description": "제한 여부"
+                    },
+                    "fileAttachments": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "description": "이미지 ID"
+                          },
+                          "imageKey": {
+                            "type": "string",
+                            "description": "원본 이미지에 대한 S3 Upload Key"
+                          },
+                          "path": {
+                            "type": "string",
+                            "description": "cdn 경로"
+                          },
+                          "status": {
+                            "type": "string",
+                            "description": "미디어 상태 - UPLOAD_IMAGE_STATUS 참고"
+                          },
+                          "mimeType": {
+                            "type": "string",
+                            "description": "마입타입"
+                          },
+                          "filename": {
+                            "type": "string",
+                            "description": "파일 이름"
+                          }
+                        },
+                        "required": [
+                          "imageKey",
+                          "path"
+                        ]
+                      },
+                      "description": "파일 첨부"
+                    },
+                    "showPreview": {
+                      "type": "boolean",
+                      "description": "미리보기 표시 여부"
+                    },
+                    "sizePerFile": {
+                      "type": "number",
+                      "description": "파일 개당 사이즈"
+                    },
+                    "fileExtensions": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      },
+                      "description": "허용된 파일 확장장 타입"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "type"
+                  ],
+                  "description": "File Attachment 커스텀 필드"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "description": "id"
+                    },
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "text",
+                        "long-text",
+                        "number",
+                        "checkbox",
+                        "multi-checkbox",
+                        "select",
+                        "multi-select",
+                        "choice",
+                        "person",
+                        "date",
+                        "email",
+                        "phone",
+                        "url",
+                        "rating",
+                        "vote",
+                        "relation",
+                        "duration",
+                        "file",
+                        "image",
+                        "formula",
+                        "rollup",
+                        "status",
+                        "category",
+                        "assignee",
+                        "id",
+                        "created-by",
+                        "created-at",
+                        "updated-at",
+                        "device-id",
+                        "ip-address",
+                        "started-at",
+                        "submitted-at",
+                        "completion-time"
+                      ],
+                      "description": "커스텀 필드 타입"
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "이름"
+                    },
+                    "restricted": {
+                      "type": "boolean",
+                      "description": "제한 여부"
+                    },
+                    "deleted": {
+                      "type": "boolean",
+                      "description": "삭제 여부"
+                    },
+                    "required": {
+                      "type": "boolean",
+                      "description": "필수 여부"
+                    },
+                    "blockTitleId": {
+                      "type": "string",
+                      "description": "블럭 타이틀 id"
+                    },
+                    "blockIndex": {
+                      "type": "number",
+                      "description": "블럭 인덱스"
+                    },
+                    "responseCount": {
+                      "type": "number",
+                      "description": "응답 갯수"
+                    },
+                    "min": {
+                      "type": "number",
+                      "description": "최소값"
+                    },
+                    "max": {
+                      "type": "number",
+                      "description": "최대값"
+                    },
+                    "multi": {
+                      "type": "boolean",
+                      "description": "다중 선택 여부"
+                    },
+                    "blockOtherId": {
+                      "type": "string",
+                      "description": "useOther 옵션을 사용할 경우 블럭 id 추가"
+                    },
+                    "placeholder": {
+                      "type": "string",
+                      "description": "플레이스홀더"
+                    },
+                    "select": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "description": "선택 타입 옵션 id"
+                          },
+                          "name": {
+                            "type": "string",
+                            "description": "선택 타입 옵션 이름"
+                          },
+                          "color": {
+                            "type": "string",
+                            "enum": [
+                              "tb01",
+                              "tb02",
+                              "tb03",
+                              "tb04",
+                              "tb05",
+                              "tb06",
+                              "tb07",
+                              "tb08",
+                              "tb09",
+                              "tb10",
+                              "tb11"
+                            ],
+                            "description": "커스텀 필드 선택 타입 옵션 색상"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "name"
+                        ]
+                      }
+                    },
+                    "orderType": {
+                      "type": "string",
+                      "enum": [
+                        "alphabet",
+                        "number"
+                      ],
+                      "description": "순서 타입"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "type",
+                    "select"
+                  ],
+                  "description": "Choice 커스텀 필드"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "description": "id"
+                    },
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "text",
+                        "long-text",
+                        "number",
+                        "checkbox",
+                        "multi-checkbox",
+                        "select",
+                        "multi-select",
+                        "choice",
+                        "person",
+                        "date",
+                        "email",
+                        "phone",
+                        "url",
+                        "rating",
+                        "vote",
+                        "relation",
+                        "duration",
+                        "file",
+                        "image",
+                        "formula",
+                        "rollup",
+                        "status",
+                        "category",
+                        "assignee",
+                        "id",
+                        "created-by",
+                        "created-at",
+                        "updated-at",
+                        "device-id",
+                        "ip-address",
+                        "started-at",
+                        "submitted-at",
+                        "completion-time"
+                      ],
+                      "description": "커스텀 필드 타입"
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "이름"
+                    },
+                    "restricted": {
+                      "type": "boolean",
+                      "description": "제한 여부"
+                    },
+                    "deleted": {
+                      "type": "boolean",
+                      "description": "삭제 여부"
+                    },
+                    "required": {
+                      "type": "boolean",
+                      "description": "필수 여부"
+                    },
+                    "blockTitleId": {
+                      "type": "string",
+                      "description": "블럭 타이틀 id"
+                    },
+                    "blockIndex": {
+                      "type": "number",
+                      "description": "블럭 인덱스"
+                    },
+                    "responseCount": {
+                      "type": "number",
+                      "description": "응답 갯수"
+                    },
+                    "min": {
+                      "type": "number",
+                      "description": "최소값"
+                    },
+                    "max": {
+                      "type": "number",
+                      "description": "최대값"
+                    },
+                    "multi": {
+                      "type": "boolean",
+                      "description": "다중 선택 여부"
+                    },
+                    "blockOtherId": {
+                      "type": "string",
+                      "description": "useOther 옵션을 사용할 경우 블럭 id 추가"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "type"
+                  ],
+                  "description": "Multi CheckBox 커스텀 필드"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "description": "id"
+                    },
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "text",
+                        "long-text",
+                        "number",
+                        "checkbox",
+                        "multi-checkbox",
+                        "select",
+                        "multi-select",
+                        "choice",
+                        "person",
+                        "date",
+                        "email",
+                        "phone",
+                        "url",
+                        "rating",
+                        "vote",
+                        "relation",
+                        "duration",
+                        "file",
+                        "image",
+                        "formula",
+                        "rollup",
+                        "status",
+                        "category",
+                        "assignee",
+                        "id",
+                        "created-by",
+                        "created-at",
+                        "updated-at",
+                        "device-id",
+                        "ip-address",
+                        "started-at",
+                        "submitted-at",
+                        "completion-time"
+                      ],
+                      "description": "커스텀 필드 타입"
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "이름"
+                    },
+                    "restricted": {
+                      "type": "boolean",
+                      "description": "제한 여부"
+                    },
+                    "deleted": {
+                      "type": "boolean",
+                      "description": "삭제 여부"
+                    },
+                    "required": {
+                      "type": "boolean",
+                      "description": "필수 여부"
+                    },
+                    "blockTitleId": {
+                      "type": "string",
+                      "description": "블럭 타이틀 id"
+                    },
+                    "blockIndex": {
+                      "type": "number",
+                      "description": "블럭 인덱스"
+                    },
+                    "responseCount": {
+                      "type": "number",
+                      "description": "응답 갯수"
+                    },
+                    "min": {
+                      "type": "number",
+                      "description": "최소값"
+                    },
+                    "max": {
+                      "type": "number",
+                      "description": "최대값"
+                    },
+                    "multi": {
+                      "type": "boolean",
+                      "description": "다중 선택 여부"
+                    },
+                    "placeholder": {
+                      "type": "string",
+                      "description": "플레이스홀더"
+                    },
+                    "width": {
+                      "type": "number",
+                      "description": "커스텀 필드 너비"
+                    },
+                    "height": {
+                      "type": "number",
+                      "description": "커스텀 필드 높이"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "type"
+                  ],
+                  "description": "Long Text 커스텀 필드"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "description": "id"
+                    },
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "text",
+                        "long-text",
+                        "number",
+                        "checkbox",
+                        "multi-checkbox",
+                        "select",
+                        "multi-select",
+                        "choice",
+                        "person",
+                        "date",
+                        "email",
+                        "phone",
+                        "url",
+                        "rating",
+                        "vote",
+                        "relation",
+                        "duration",
+                        "file",
+                        "image",
+                        "formula",
+                        "rollup",
+                        "status",
+                        "category",
+                        "assignee",
+                        "id",
+                        "created-by",
+                        "created-at",
+                        "updated-at",
+                        "device-id",
+                        "ip-address",
+                        "started-at",
+                        "submitted-at",
+                        "completion-time"
+                      ],
+                      "description": "커스텀 필드 타입"
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "이름"
+                    },
+                    "restricted": {
+                      "type": "boolean",
+                      "description": "제한 여부"
+                    },
+                    "deleted": {
+                      "type": "boolean",
+                      "description": "삭제 여부"
+                    },
+                    "required": {
+                      "type": "boolean",
+                      "description": "필수 여부"
+                    },
+                    "blockTitleId": {
+                      "type": "string",
+                      "description": "블럭 타이틀 id"
+                    },
+                    "blockIndex": {
+                      "type": "number",
+                      "description": "블럭 인덱스"
+                    },
+                    "responseCount": {
+                      "type": "number",
+                      "description": "응답 갯수"
+                    },
+                    "select": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "description": "선택 타입 옵션 id"
+                          },
+                          "name": {
+                            "type": "string",
+                            "description": "선택 타입 옵션 이름"
+                          },
+                          "color": {
+                            "type": "string",
+                            "enum": [
+                              "tb01",
+                              "tb02",
+                              "tb03",
+                              "tb04",
+                              "tb05",
+                              "tb06",
+                              "tb07",
+                              "tb08",
+                              "tb09",
+                              "tb10",
+                              "tb11"
+                            ],
+                            "description": "커스텀 필드 선택 타입 옵션 색상"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "name"
+                        ]
+                      }
+                    },
+                    "min": {
+                      "type": "number",
+                      "description": "최소값"
+                    },
+                    "max": {
+                      "type": "number",
+                      "description": "최대값"
+                    },
+                    "multi": {
+                      "type": "boolean",
+                      "description": "다중 선택 여부"
+                    },
+                    "placeholder": {
+                      "type": "string",
+                      "description": "플레이스홀더"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "type",
+                    "select"
+                  ]
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "description": "id"
+                    },
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "text",
+                        "long-text",
+                        "number",
+                        "checkbox",
+                        "multi-checkbox",
+                        "select",
+                        "multi-select",
+                        "choice",
+                        "person",
+                        "date",
+                        "email",
+                        "phone",
+                        "url",
+                        "rating",
+                        "vote",
+                        "relation",
+                        "duration",
+                        "file",
+                        "image",
+                        "formula",
+                        "rollup",
+                        "status",
+                        "category",
+                        "assignee",
+                        "id",
+                        "created-by",
+                        "created-at",
+                        "updated-at",
+                        "device-id",
+                        "ip-address",
+                        "started-at",
+                        "submitted-at",
+                        "completion-time"
+                      ],
+                      "description": "커스텀 필드 타입"
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "이름"
+                    },
+                    "restricted": {
+                      "type": "boolean",
+                      "description": "제한 여부"
+                    },
+                    "min": {
+                      "type": "number",
+                      "description": "최소값"
+                    },
+                    "max": {
+                      "type": "number",
+                      "description": "최대값"
+                    },
+                    "multi": {
+                      "type": "boolean",
+                      "description": "다중 선택 여부"
+                    },
+                    "placeholder": {
+                      "type": "string",
+                      "description": "플레이스홀더"
+                    },
+                    "showNumber": {
+                      "type": "boolean",
+                      "description": "숫자 표시 여부"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "type"
+                  ],
+                  "description": "Number 커스텀 필드"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "description": "id"
+                    },
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "text",
+                        "long-text",
+                        "number",
+                        "checkbox",
+                        "multi-checkbox",
+                        "select",
+                        "multi-select",
+                        "choice",
+                        "person",
+                        "date",
+                        "email",
+                        "phone",
+                        "url",
+                        "rating",
+                        "vote",
+                        "relation",
+                        "duration",
+                        "file",
+                        "image",
+                        "formula",
+                        "rollup",
+                        "status",
+                        "category",
+                        "assignee",
+                        "id",
+                        "created-by",
+                        "created-at",
+                        "updated-at",
+                        "device-id",
+                        "ip-address",
+                        "started-at",
+                        "submitted-at",
+                        "completion-time"
+                      ],
+                      "description": "커스텀 필드 타입"
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "이름"
+                    },
+                    "restricted": {
+                      "type": "boolean",
+                      "description": "제한 여부"
+                    },
+                    "deleted": {
+                      "type": "boolean",
+                      "description": "삭제 여부"
+                    },
+                    "required": {
+                      "type": "boolean",
+                      "description": "필수 여부"
+                    },
+                    "blockTitleId": {
+                      "type": "string",
+                      "description": "블럭 타이틀 id"
+                    },
+                    "blockIndex": {
+                      "type": "number",
+                      "description": "블럭 인덱스"
+                    },
+                    "responseCount": {
+                      "type": "number",
+                      "description": "응답 갯수"
+                    },
+                    "placeholder": {
+                      "type": "string",
+                      "description": "플레이스홀더"
+                    },
+                    "min": {
+                      "type": "number",
+                      "description": "최소값"
+                    },
+                    "max": {
+                      "type": "number",
+                      "description": "최대값"
+                    },
+                    "multi": {
+                      "type": "boolean",
+                      "description": "다중 선택 여부"
+                    },
+                    "fileAttachments": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "description": "이미지 ID"
+                          },
+                          "imageKey": {
+                            "type": "string",
+                            "description": "원본 이미지에 대한 S3 Upload Key"
+                          },
+                          "path": {
+                            "type": "string",
+                            "description": "cdn 경로"
+                          },
+                          "status": {
+                            "type": "string",
+                            "description": "미디어 상태 - UPLOAD_IMAGE_STATUS 참고"
+                          },
+                          "mimeType": {
+                            "type": "string",
+                            "description": "마입타입"
+                          },
+                          "filename": {
+                            "type": "string",
+                            "description": "파일 이름"
+                          }
+                        },
+                        "required": [
+                          "imageKey",
+                          "path"
+                        ]
+                      },
+                      "description": "파일 첨부"
+                    },
+                    "showPreview": {
+                      "type": "boolean",
+                      "description": "미리보기 표시 여부"
+                    },
+                    "sizePerFile": {
+                      "type": "number",
+                      "description": "파일 개당 사이즈"
+                    },
+                    "fileExtensions": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      },
+                      "description": "허용된 파일 확장장 타입"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "type"
+                  ],
+                  "description": "File Attachment 커스텀 필드"
+                }
+              ]
+            }
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "description",
+          "fields",
+          "createdAt",
+          "updatedAt"
+        ],
+        "additionalProperties": false,
+        "description": "Channel object",
+        "example": {
+          "id": "1234567890",
+          "name": "Channel Name",
+          "description": "Channel Description",
+          "fields": []
+        }
+      },
+      "Post": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "content": {
+            "type": "string"
+          },
+          "fields": {
+            "type": "object",
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "description": "Value of text field",
+                  "example": "Text value"
+                },
+                {
+                  "type": "number",
+                  "description": "Value of number field",
+                  "example": 77
+                },
+                {
+                  "type": "boolean",
+                  "description": "Value of checkbox field",
+                  "example": true
+                },
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "Value of select field",
+                  "examples": [
+                    [
+                      "selectOptionId1"
+                    ],
+                    [
+                      "multiSelectOptionId1",
+                      "multiSelectOptionId2"
+                    ],
+                    [
+                      "userId1",
+                      "userId2"
+                    ],
+                    [
+                      "fileId1",
+                      "fileId2"
+                    ]
+                  ]
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "date": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+                      }
+                    },
+                    "hasTime": {
+                      "type": "boolean"
+                    },
+                    "timeZone": {
+                      "type": "string"
+                    },
+                    "backgroundColor": {
+                      "type": "string"
+                    }
+                  },
+                  "description": "Value of date field",
+                  "examples": [
+                    {
+                      "date": [
+                        "2021-01-01"
+                      ],
+                      "hasTime": true,
+                      "timeZone": "Asia/Seoul"
+                    }
+                  ]
+                }
+              ]
+            },
+            "description": "A map of field. See examples below."
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "content",
+          "fields",
+          "createdAt",
+          "updatedAt"
+        ],
+        "additionalProperties": false,
+        "description": "Post is a single page that can be written in a channel."
+      }
+    },
+    "parameters": {}
+  },
   "paths": {
-    "/plants": {
+    "/members": {
       "get": {
-        "description": "Returns all plants from the system that the user has access to",
+        "tags": [
+          "Users"
+        ],
+        "description": "Get all member list of domain",
+        "summary": "Get member list",
         "parameters": [
           {
-            "name": "limit",
-            "in": "query",
-            "description": "The maximum number of results to return",
+            "name": "Accept",
+            "in": "header",
+            "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
+              "type": "string",
+              "enum": [
+                "application/json"
+              ]
+            },
+            "example": "application/json"
           }
         ],
         "responses": {
           "200": {
-            "description": "Plant response",
+            "description": "Object with member list.",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Plant"
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "enum": [
+                        "success"
+                      ]
+                    },
+                    "members": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/UserWithRole"
+                      }
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "members"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "enum": [
+                        "error"
+                      ]
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "message"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "enum": [
+                        "error"
+                      ]
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "message"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "enum": [
+                        "error"
+                      ]
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "message"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "enum": [
+                        "error"
+                      ]
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "message"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/subscribers": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "description": "Get all subscriber list of domain",
+        "summary": "Get subscriber list",
+        "parameters": [
+          {
+            "name": "Accept",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "application/json"
+              ]
+            },
+            "example": "application/json"
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "required": false,
+            "name": "cursor",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "number",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 10
+            },
+            "required": false,
+            "name": "limit",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Object with subscriber list.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "hasMore": {
+                      "type": "boolean"
+                    },
+                    "cursor": {
+                      "type": "string"
+                    },
+                    "limit": {
+                      "type": "number"
+                    },
+                    "status": {
+                      "type": "string",
+                      "enum": [
+                        "success"
+                      ]
+                    },
+                    "subscribers": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/UserWithRole"
+                      }
+                    }
+                  },
+                  "required": [
+                    "hasMore",
+                    "cursor",
+                    "limit",
+                    "status",
+                    "subscribers"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "enum": [
+                        "error"
+                      ]
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "message"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "enum": [
+                        "error"
+                      ]
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "message"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "enum": [
+                        "error"
+                      ]
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "message"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "enum": [
+                        "error"
+                      ]
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "message"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/domain": {
+      "get": {
+        "tags": [
+          "Domain"
+        ],
+        "summary": "Get domain informations",
+        "description": "Get domain informations authenticated by a bearer token",
+        "parameters": [
+          {
+            "name": "Accept",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "application/json"
+              ]
+            },
+            "example": "application/json"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Object with domain information.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "enum": [
+                        "success"
+                      ]
+                    },
+                    "domain": {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "type": "string"
+                        },
+                        "displayName": {
+                          "type": "string"
+                        },
+                        "url": {
+                          "type": "string"
+                        },
+                        "favicon": {
+                          "type": "string"
+                        },
+                        "createdAt": {
+                          "type": "string",
+                          "format": "date"
+                        },
+                        "updatedAt": {
+                          "type": "string",
+                          "format": "date"
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "displayName",
+                        "url",
+                        "createdAt",
+                        "updatedAt"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "domain"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "enum": [
+                        "error"
+                      ]
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "message"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "enum": [
+                        "error"
+                      ]
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "message"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "enum": [
+                        "error"
+                      ]
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "message"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "enum": [
+                        "error"
+                      ]
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "message"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/channels": {
+      "get": {
+        "tags": [
+          "Channels"
+        ],
+        "summary": "List channels",
+        "description": "List all channels of domain",
+        "parameters": [
+          {
+            "name": "Accept",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "application/json"
+              ]
+            },
+            "example": "application/json"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Object with channel list.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "enum": [
+                        "success"
+                      ]
+                    },
+                    "channels": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "description": {
+                            "type": "string"
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "format": "date"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "format": "date"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "name",
+                          "description",
+                          "createdAt",
+                          "updatedAt"
+                        ],
+                        "additionalProperties": false
+                      }
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "channels"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "enum": [
+                        "error"
+                      ]
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "message"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "enum": [
+                        "error"
+                      ]
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "message"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "enum": [
+                        "error"
+                      ]
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "message"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "enum": [
+                        "error"
+                      ]
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "message"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/channel/:id": {
+      "get": {
+        "tags": [
+          "Channels"
+        ],
+        "description": "Get channel detail by channelId",
+        "summary": "Get a channel",
+        "parameters": [
+          {
+            "name": "Accept",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "application/json"
+              ]
+            },
+            "example": "application/json"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "example": "CHANNEL_ID"
+            },
+            "required": true,
+            "name": "id",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Object with channel.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "enum": [
+                        "success"
+                      ]
+                    },
+                    "channel": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "description": {
+                          "type": "string"
+                        },
+                        "fields": {
+                          "type": "array",
+                          "items": {
+                            "anyOf": [
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "id": {
+                                    "type": "string",
+                                    "description": "id"
+                                  },
+                                  "type": {
+                                    "type": "string",
+                                    "enum": [
+                                      "text",
+                                      "long-text",
+                                      "number",
+                                      "checkbox",
+                                      "multi-checkbox",
+                                      "select",
+                                      "multi-select",
+                                      "choice",
+                                      "person",
+                                      "date",
+                                      "email",
+                                      "phone",
+                                      "url",
+                                      "rating",
+                                      "vote",
+                                      "relation",
+                                      "duration",
+                                      "file",
+                                      "image",
+                                      "formula",
+                                      "rollup",
+                                      "status",
+                                      "category",
+                                      "assignee",
+                                      "id",
+                                      "created-by",
+                                      "created-at",
+                                      "updated-at",
+                                      "device-id",
+                                      "ip-address",
+                                      "started-at",
+                                      "submitted-at",
+                                      "completion-time"
+                                    ],
+                                    "description": "커스텀 필드 타입"
+                                  },
+                                  "name": {
+                                    "type": "string",
+                                    "description": "이름"
+                                  },
+                                  "restricted": {
+                                    "type": "boolean",
+                                    "description": "제한 여부"
+                                  }
+                                },
+                                "required": [
+                                  "id",
+                                  "type"
+                                ],
+                                "additionalProperties": {}
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "id": {
+                                    "type": "string",
+                                    "description": "id"
+                                  },
+                                  "type": {
+                                    "type": "string",
+                                    "enum": [
+                                      "text",
+                                      "long-text",
+                                      "number",
+                                      "checkbox",
+                                      "multi-checkbox",
+                                      "select",
+                                      "multi-select",
+                                      "choice",
+                                      "person",
+                                      "date",
+                                      "email",
+                                      "phone",
+                                      "url",
+                                      "rating",
+                                      "vote",
+                                      "relation",
+                                      "duration",
+                                      "file",
+                                      "image",
+                                      "formula",
+                                      "rollup",
+                                      "status",
+                                      "category",
+                                      "assignee",
+                                      "id",
+                                      "created-by",
+                                      "created-at",
+                                      "updated-at",
+                                      "device-id",
+                                      "ip-address",
+                                      "started-at",
+                                      "submitted-at",
+                                      "completion-time"
+                                    ],
+                                    "description": "커스텀 필드 타입"
+                                  },
+                                  "name": {
+                                    "type": "string",
+                                    "description": "이름"
+                                  },
+                                  "restricted": {
+                                    "type": "boolean",
+                                    "description": "제한 여부"
+                                  },
+                                  "select": {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "object",
+                                      "properties": {
+                                        "id": {
+                                          "type": "string",
+                                          "description": "선택 타입 옵션 id"
+                                        },
+                                        "name": {
+                                          "type": "string",
+                                          "description": "선택 타입 옵션 이름"
+                                        },
+                                        "color": {
+                                          "type": "string",
+                                          "enum": [
+                                            "tb01",
+                                            "tb02",
+                                            "tb03",
+                                            "tb04",
+                                            "tb05",
+                                            "tb06",
+                                            "tb07",
+                                            "tb08",
+                                            "tb09",
+                                            "tb10",
+                                            "tb11"
+                                          ],
+                                          "description": "커스텀 필드 선택 타입 옵션 색상"
+                                        }
+                                      },
+                                      "required": [
+                                        "id",
+                                        "name"
+                                      ]
+                                    }
+                                  }
+                                },
+                                "required": [
+                                  "id",
+                                  "type",
+                                  "select"
+                                ],
+                                "additionalProperties": {},
+                                "description": "Select 커스텀 필드"
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "id": {
+                                    "type": "string",
+                                    "description": "id"
+                                  },
+                                  "type": {
+                                    "type": "string",
+                                    "enum": [
+                                      "text",
+                                      "long-text",
+                                      "number",
+                                      "checkbox",
+                                      "multi-checkbox",
+                                      "select",
+                                      "multi-select",
+                                      "choice",
+                                      "person",
+                                      "date",
+                                      "email",
+                                      "phone",
+                                      "url",
+                                      "rating",
+                                      "vote",
+                                      "relation",
+                                      "duration",
+                                      "file",
+                                      "image",
+                                      "formula",
+                                      "rollup",
+                                      "status",
+                                      "category",
+                                      "assignee",
+                                      "id",
+                                      "created-by",
+                                      "created-at",
+                                      "updated-at",
+                                      "device-id",
+                                      "ip-address",
+                                      "started-at",
+                                      "submitted-at",
+                                      "completion-time"
+                                    ],
+                                    "description": "커스텀 필드 타입"
+                                  },
+                                  "name": {
+                                    "type": "string",
+                                    "description": "이름"
+                                  },
+                                  "restricted": {
+                                    "type": "boolean",
+                                    "description": "제한 여부"
+                                  }
+                                },
+                                "required": [
+                                  "id",
+                                  "type"
+                                ],
+                                "additionalProperties": {},
+                                "description": "Text 커스텀 필드"
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "id": {
+                                    "type": "string",
+                                    "description": "id"
+                                  },
+                                  "type": {
+                                    "type": "string",
+                                    "enum": [
+                                      "text",
+                                      "long-text",
+                                      "number",
+                                      "checkbox",
+                                      "multi-checkbox",
+                                      "select",
+                                      "multi-select",
+                                      "choice",
+                                      "person",
+                                      "date",
+                                      "email",
+                                      "phone",
+                                      "url",
+                                      "rating",
+                                      "vote",
+                                      "relation",
+                                      "duration",
+                                      "file",
+                                      "image",
+                                      "formula",
+                                      "rollup",
+                                      "status",
+                                      "category",
+                                      "assignee",
+                                      "id",
+                                      "created-by",
+                                      "created-at",
+                                      "updated-at",
+                                      "device-id",
+                                      "ip-address",
+                                      "started-at",
+                                      "submitted-at",
+                                      "completion-time"
+                                    ],
+                                    "description": "커스텀 필드 타입"
+                                  },
+                                  "name": {
+                                    "type": "string",
+                                    "description": "이름"
+                                  },
+                                  "restricted": {
+                                    "type": "boolean",
+                                    "description": "제한 여부"
+                                  }
+                                },
+                                "required": [
+                                  "id",
+                                  "type"
+                                ],
+                                "additionalProperties": {},
+                                "description": "Number 커스텀 필드"
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "id": {
+                                    "type": "string",
+                                    "description": "id"
+                                  },
+                                  "type": {
+                                    "type": "string",
+                                    "enum": [
+                                      "text",
+                                      "long-text",
+                                      "number",
+                                      "checkbox",
+                                      "multi-checkbox",
+                                      "select",
+                                      "multi-select",
+                                      "choice",
+                                      "person",
+                                      "date",
+                                      "email",
+                                      "phone",
+                                      "url",
+                                      "rating",
+                                      "vote",
+                                      "relation",
+                                      "duration",
+                                      "file",
+                                      "image",
+                                      "formula",
+                                      "rollup",
+                                      "status",
+                                      "category",
+                                      "assignee",
+                                      "id",
+                                      "created-by",
+                                      "created-at",
+                                      "updated-at",
+                                      "device-id",
+                                      "ip-address",
+                                      "started-at",
+                                      "submitted-at",
+                                      "completion-time"
+                                    ],
+                                    "description": "커스텀 필드 타입"
+                                  },
+                                  "name": {
+                                    "type": "string",
+                                    "description": "이름"
+                                  },
+                                  "restricted": {
+                                    "type": "boolean",
+                                    "description": "제한 여부"
+                                  },
+                                  "color": {
+                                    "type": "string",
+                                    "description": "색상"
+                                  },
+                                  "shape": {
+                                    "type": "string",
+                                    "enum": [
+                                      "star",
+                                      "heart"
+                                    ],
+                                    "description": "모양"
+                                  }
+                                },
+                                "required": [
+                                  "id",
+                                  "type"
+                                ],
+                                "additionalProperties": {}
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "id": {
+                                    "type": "string",
+                                    "description": "id"
+                                  },
+                                  "type": {
+                                    "type": "string",
+                                    "enum": [
+                                      "text",
+                                      "long-text",
+                                      "number",
+                                      "checkbox",
+                                      "multi-checkbox",
+                                      "select",
+                                      "multi-select",
+                                      "choice",
+                                      "person",
+                                      "date",
+                                      "email",
+                                      "phone",
+                                      "url",
+                                      "rating",
+                                      "vote",
+                                      "relation",
+                                      "duration",
+                                      "file",
+                                      "image",
+                                      "formula",
+                                      "rollup",
+                                      "status",
+                                      "category",
+                                      "assignee",
+                                      "id",
+                                      "created-by",
+                                      "created-at",
+                                      "updated-at",
+                                      "device-id",
+                                      "ip-address",
+                                      "started-at",
+                                      "submitted-at",
+                                      "completion-time"
+                                    ],
+                                    "description": "커스텀 필드 타입"
+                                  },
+                                  "name": {
+                                    "type": "string",
+                                    "description": "이름"
+                                  },
+                                  "restricted": {
+                                    "type": "boolean",
+                                    "description": "제한 여부"
+                                  },
+                                  "date": {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "string"
+                                    },
+                                    "minItems": 1,
+                                    "maxItems": 2,
+                                    "description": "날짜"
+                                  },
+                                  "hasTime": {
+                                    "type": "boolean",
+                                    "description": "시간 표시 여부"
+                                  },
+                                  "timeZone": {
+                                    "type": "string",
+                                    "description": "시간대"
+                                  },
+                                  "backgroundColor": {
+                                    "type": "string",
+                                    "description": "배경색"
+                                  },
+                                  "format": {
+                                    "type": "object",
+                                    "properties": {
+                                      "date": {
+                                        "type": "object",
+                                        "properties": {
+                                          "type": {
+                                            "type": "string",
+                                            "enum": [
+                                              "full",
+                                              "ymd",
+                                              "mdy",
+                                              "dmy"
+                                            ],
+                                            "description": "커스텀 필드 날짜 타입"
+                                          },
+                                          "time": {
+                                            "type": "boolean",
+                                            "description": "시간 표시 여부"
+                                          },
+                                          "is24": {
+                                            "type": "boolean",
+                                            "description": "24시간 표시 여부"
+                                          }
+                                        },
+                                        "required": [
+                                          "type"
+                                        ],
+                                        "description": "커스텀 필드 날짜 표시 형식"
+                                      }
+                                    },
+                                    "description": "커스텀 필드 표시 형식"
+                                  }
+                                },
+                                "required": [
+                                  "id",
+                                  "type"
+                                ],
+                                "additionalProperties": {}
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "id": {
+                                    "type": "string",
+                                    "description": "id"
+                                  },
+                                  "type": {
+                                    "type": "string",
+                                    "enum": [
+                                      "text",
+                                      "long-text",
+                                      "number",
+                                      "checkbox",
+                                      "multi-checkbox",
+                                      "select",
+                                      "multi-select",
+                                      "choice",
+                                      "person",
+                                      "date",
+                                      "email",
+                                      "phone",
+                                      "url",
+                                      "rating",
+                                      "vote",
+                                      "relation",
+                                      "duration",
+                                      "file",
+                                      "image",
+                                      "formula",
+                                      "rollup",
+                                      "status",
+                                      "category",
+                                      "assignee",
+                                      "id",
+                                      "created-by",
+                                      "created-at",
+                                      "updated-at",
+                                      "device-id",
+                                      "ip-address",
+                                      "started-at",
+                                      "submitted-at",
+                                      "completion-time"
+                                    ],
+                                    "description": "커스텀 필드 타입"
+                                  },
+                                  "name": {
+                                    "type": "string",
+                                    "description": "이름"
+                                  },
+                                  "restricted": {
+                                    "type": "boolean",
+                                    "description": "제한 여부"
+                                  },
+                                  "fileAttachments": {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "object",
+                                      "properties": {
+                                        "id": {
+                                          "type": "string",
+                                          "description": "이미지 ID"
+                                        },
+                                        "imageKey": {
+                                          "type": "string",
+                                          "description": "원본 이미지에 대한 S3 Upload Key"
+                                        },
+                                        "path": {
+                                          "type": "string",
+                                          "description": "cdn 경로"
+                                        },
+                                        "status": {
+                                          "type": "string",
+                                          "description": "미디어 상태 - UPLOAD_IMAGE_STATUS 참고"
+                                        },
+                                        "mimeType": {
+                                          "type": "string",
+                                          "description": "마입타입"
+                                        },
+                                        "filename": {
+                                          "type": "string",
+                                          "description": "파일 이름"
+                                        }
+                                      },
+                                      "required": [
+                                        "imageKey",
+                                        "path"
+                                      ]
+                                    },
+                                    "description": "파일 첨부"
+                                  },
+                                  "showPreview": {
+                                    "type": "boolean",
+                                    "description": "미리보기 표시 여부"
+                                  },
+                                  "sizePerFile": {
+                                    "type": "number",
+                                    "description": "파일 개당 사이즈"
+                                  },
+                                  "fileExtensions": {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "string"
+                                    },
+                                    "description": "허용된 파일 확장장 타입"
+                                  }
+                                },
+                                "required": [
+                                  "id",
+                                  "type"
+                                ],
+                                "description": "File Attachment 커스텀 필드"
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "id": {
+                                    "type": "string",
+                                    "description": "id"
+                                  },
+                                  "type": {
+                                    "type": "string",
+                                    "enum": [
+                                      "text",
+                                      "long-text",
+                                      "number",
+                                      "checkbox",
+                                      "multi-checkbox",
+                                      "select",
+                                      "multi-select",
+                                      "choice",
+                                      "person",
+                                      "date",
+                                      "email",
+                                      "phone",
+                                      "url",
+                                      "rating",
+                                      "vote",
+                                      "relation",
+                                      "duration",
+                                      "file",
+                                      "image",
+                                      "formula",
+                                      "rollup",
+                                      "status",
+                                      "category",
+                                      "assignee",
+                                      "id",
+                                      "created-by",
+                                      "created-at",
+                                      "updated-at",
+                                      "device-id",
+                                      "ip-address",
+                                      "started-at",
+                                      "submitted-at",
+                                      "completion-time"
+                                    ],
+                                    "description": "커스텀 필드 타입"
+                                  },
+                                  "name": {
+                                    "type": "string",
+                                    "description": "이름"
+                                  },
+                                  "restricted": {
+                                    "type": "boolean",
+                                    "description": "제한 여부"
+                                  },
+                                  "deleted": {
+                                    "type": "boolean",
+                                    "description": "삭제 여부"
+                                  },
+                                  "required": {
+                                    "type": "boolean",
+                                    "description": "필수 여부"
+                                  },
+                                  "blockTitleId": {
+                                    "type": "string",
+                                    "description": "블럭 타이틀 id"
+                                  },
+                                  "blockIndex": {
+                                    "type": "number",
+                                    "description": "블럭 인덱스"
+                                  },
+                                  "responseCount": {
+                                    "type": "number",
+                                    "description": "응답 갯수"
+                                  },
+                                  "min": {
+                                    "type": "number",
+                                    "description": "최소값"
+                                  },
+                                  "max": {
+                                    "type": "number",
+                                    "description": "최대값"
+                                  },
+                                  "multi": {
+                                    "type": "boolean",
+                                    "description": "다중 선택 여부"
+                                  },
+                                  "blockOtherId": {
+                                    "type": "string",
+                                    "description": "useOther 옵션을 사용할 경우 블럭 id 추가"
+                                  },
+                                  "placeholder": {
+                                    "type": "string",
+                                    "description": "플레이스홀더"
+                                  },
+                                  "select": {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "object",
+                                      "properties": {
+                                        "id": {
+                                          "type": "string",
+                                          "description": "선택 타입 옵션 id"
+                                        },
+                                        "name": {
+                                          "type": "string",
+                                          "description": "선택 타입 옵션 이름"
+                                        },
+                                        "color": {
+                                          "type": "string",
+                                          "enum": [
+                                            "tb01",
+                                            "tb02",
+                                            "tb03",
+                                            "tb04",
+                                            "tb05",
+                                            "tb06",
+                                            "tb07",
+                                            "tb08",
+                                            "tb09",
+                                            "tb10",
+                                            "tb11"
+                                          ],
+                                          "description": "커스텀 필드 선택 타입 옵션 색상"
+                                        }
+                                      },
+                                      "required": [
+                                        "id",
+                                        "name"
+                                      ]
+                                    }
+                                  },
+                                  "orderType": {
+                                    "type": "string",
+                                    "enum": [
+                                      "alphabet",
+                                      "number"
+                                    ],
+                                    "description": "순서 타입"
+                                  }
+                                },
+                                "required": [
+                                  "id",
+                                  "type",
+                                  "select"
+                                ],
+                                "description": "Choice 커스텀 필드"
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "id": {
+                                    "type": "string",
+                                    "description": "id"
+                                  },
+                                  "type": {
+                                    "type": "string",
+                                    "enum": [
+                                      "text",
+                                      "long-text",
+                                      "number",
+                                      "checkbox",
+                                      "multi-checkbox",
+                                      "select",
+                                      "multi-select",
+                                      "choice",
+                                      "person",
+                                      "date",
+                                      "email",
+                                      "phone",
+                                      "url",
+                                      "rating",
+                                      "vote",
+                                      "relation",
+                                      "duration",
+                                      "file",
+                                      "image",
+                                      "formula",
+                                      "rollup",
+                                      "status",
+                                      "category",
+                                      "assignee",
+                                      "id",
+                                      "created-by",
+                                      "created-at",
+                                      "updated-at",
+                                      "device-id",
+                                      "ip-address",
+                                      "started-at",
+                                      "submitted-at",
+                                      "completion-time"
+                                    ],
+                                    "description": "커스텀 필드 타입"
+                                  },
+                                  "name": {
+                                    "type": "string",
+                                    "description": "이름"
+                                  },
+                                  "restricted": {
+                                    "type": "boolean",
+                                    "description": "제한 여부"
+                                  },
+                                  "deleted": {
+                                    "type": "boolean",
+                                    "description": "삭제 여부"
+                                  },
+                                  "required": {
+                                    "type": "boolean",
+                                    "description": "필수 여부"
+                                  },
+                                  "blockTitleId": {
+                                    "type": "string",
+                                    "description": "블럭 타이틀 id"
+                                  },
+                                  "blockIndex": {
+                                    "type": "number",
+                                    "description": "블럭 인덱스"
+                                  },
+                                  "responseCount": {
+                                    "type": "number",
+                                    "description": "응답 갯수"
+                                  },
+                                  "min": {
+                                    "type": "number",
+                                    "description": "최소값"
+                                  },
+                                  "max": {
+                                    "type": "number",
+                                    "description": "최대값"
+                                  },
+                                  "multi": {
+                                    "type": "boolean",
+                                    "description": "다중 선택 여부"
+                                  },
+                                  "blockOtherId": {
+                                    "type": "string",
+                                    "description": "useOther 옵션을 사용할 경우 블럭 id 추가"
+                                  }
+                                },
+                                "required": [
+                                  "id",
+                                  "type"
+                                ],
+                                "description": "Multi CheckBox 커스텀 필드"
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "id": {
+                                    "type": "string",
+                                    "description": "id"
+                                  },
+                                  "type": {
+                                    "type": "string",
+                                    "enum": [
+                                      "text",
+                                      "long-text",
+                                      "number",
+                                      "checkbox",
+                                      "multi-checkbox",
+                                      "select",
+                                      "multi-select",
+                                      "choice",
+                                      "person",
+                                      "date",
+                                      "email",
+                                      "phone",
+                                      "url",
+                                      "rating",
+                                      "vote",
+                                      "relation",
+                                      "duration",
+                                      "file",
+                                      "image",
+                                      "formula",
+                                      "rollup",
+                                      "status",
+                                      "category",
+                                      "assignee",
+                                      "id",
+                                      "created-by",
+                                      "created-at",
+                                      "updated-at",
+                                      "device-id",
+                                      "ip-address",
+                                      "started-at",
+                                      "submitted-at",
+                                      "completion-time"
+                                    ],
+                                    "description": "커스텀 필드 타입"
+                                  },
+                                  "name": {
+                                    "type": "string",
+                                    "description": "이름"
+                                  },
+                                  "restricted": {
+                                    "type": "boolean",
+                                    "description": "제한 여부"
+                                  },
+                                  "deleted": {
+                                    "type": "boolean",
+                                    "description": "삭제 여부"
+                                  },
+                                  "required": {
+                                    "type": "boolean",
+                                    "description": "필수 여부"
+                                  },
+                                  "blockTitleId": {
+                                    "type": "string",
+                                    "description": "블럭 타이틀 id"
+                                  },
+                                  "blockIndex": {
+                                    "type": "number",
+                                    "description": "블럭 인덱스"
+                                  },
+                                  "responseCount": {
+                                    "type": "number",
+                                    "description": "응답 갯수"
+                                  },
+                                  "min": {
+                                    "type": "number",
+                                    "description": "최소값"
+                                  },
+                                  "max": {
+                                    "type": "number",
+                                    "description": "최대값"
+                                  },
+                                  "multi": {
+                                    "type": "boolean",
+                                    "description": "다중 선택 여부"
+                                  },
+                                  "placeholder": {
+                                    "type": "string",
+                                    "description": "플레이스홀더"
+                                  },
+                                  "width": {
+                                    "type": "number",
+                                    "description": "커스텀 필드 너비"
+                                  },
+                                  "height": {
+                                    "type": "number",
+                                    "description": "커스텀 필드 높이"
+                                  }
+                                },
+                                "required": [
+                                  "id",
+                                  "type"
+                                ],
+                                "description": "Long Text 커스텀 필드"
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "id": {
+                                    "type": "string",
+                                    "description": "id"
+                                  },
+                                  "type": {
+                                    "type": "string",
+                                    "enum": [
+                                      "text",
+                                      "long-text",
+                                      "number",
+                                      "checkbox",
+                                      "multi-checkbox",
+                                      "select",
+                                      "multi-select",
+                                      "choice",
+                                      "person",
+                                      "date",
+                                      "email",
+                                      "phone",
+                                      "url",
+                                      "rating",
+                                      "vote",
+                                      "relation",
+                                      "duration",
+                                      "file",
+                                      "image",
+                                      "formula",
+                                      "rollup",
+                                      "status",
+                                      "category",
+                                      "assignee",
+                                      "id",
+                                      "created-by",
+                                      "created-at",
+                                      "updated-at",
+                                      "device-id",
+                                      "ip-address",
+                                      "started-at",
+                                      "submitted-at",
+                                      "completion-time"
+                                    ],
+                                    "description": "커스텀 필드 타입"
+                                  },
+                                  "name": {
+                                    "type": "string",
+                                    "description": "이름"
+                                  },
+                                  "restricted": {
+                                    "type": "boolean",
+                                    "description": "제한 여부"
+                                  },
+                                  "deleted": {
+                                    "type": "boolean",
+                                    "description": "삭제 여부"
+                                  },
+                                  "required": {
+                                    "type": "boolean",
+                                    "description": "필수 여부"
+                                  },
+                                  "blockTitleId": {
+                                    "type": "string",
+                                    "description": "블럭 타이틀 id"
+                                  },
+                                  "blockIndex": {
+                                    "type": "number",
+                                    "description": "블럭 인덱스"
+                                  },
+                                  "responseCount": {
+                                    "type": "number",
+                                    "description": "응답 갯수"
+                                  },
+                                  "select": {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "object",
+                                      "properties": {
+                                        "id": {
+                                          "type": "string",
+                                          "description": "선택 타입 옵션 id"
+                                        },
+                                        "name": {
+                                          "type": "string",
+                                          "description": "선택 타입 옵션 이름"
+                                        },
+                                        "color": {
+                                          "type": "string",
+                                          "enum": [
+                                            "tb01",
+                                            "tb02",
+                                            "tb03",
+                                            "tb04",
+                                            "tb05",
+                                            "tb06",
+                                            "tb07",
+                                            "tb08",
+                                            "tb09",
+                                            "tb10",
+                                            "tb11"
+                                          ],
+                                          "description": "커스텀 필드 선택 타입 옵션 색상"
+                                        }
+                                      },
+                                      "required": [
+                                        "id",
+                                        "name"
+                                      ]
+                                    }
+                                  },
+                                  "min": {
+                                    "type": "number",
+                                    "description": "최소값"
+                                  },
+                                  "max": {
+                                    "type": "number",
+                                    "description": "최대값"
+                                  },
+                                  "multi": {
+                                    "type": "boolean",
+                                    "description": "다중 선택 여부"
+                                  },
+                                  "placeholder": {
+                                    "type": "string",
+                                    "description": "플레이스홀더"
+                                  }
+                                },
+                                "required": [
+                                  "id",
+                                  "type",
+                                  "select"
+                                ]
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "id": {
+                                    "type": "string",
+                                    "description": "id"
+                                  },
+                                  "type": {
+                                    "type": "string",
+                                    "enum": [
+                                      "text",
+                                      "long-text",
+                                      "number",
+                                      "checkbox",
+                                      "multi-checkbox",
+                                      "select",
+                                      "multi-select",
+                                      "choice",
+                                      "person",
+                                      "date",
+                                      "email",
+                                      "phone",
+                                      "url",
+                                      "rating",
+                                      "vote",
+                                      "relation",
+                                      "duration",
+                                      "file",
+                                      "image",
+                                      "formula",
+                                      "rollup",
+                                      "status",
+                                      "category",
+                                      "assignee",
+                                      "id",
+                                      "created-by",
+                                      "created-at",
+                                      "updated-at",
+                                      "device-id",
+                                      "ip-address",
+                                      "started-at",
+                                      "submitted-at",
+                                      "completion-time"
+                                    ],
+                                    "description": "커스텀 필드 타입"
+                                  },
+                                  "name": {
+                                    "type": "string",
+                                    "description": "이름"
+                                  },
+                                  "restricted": {
+                                    "type": "boolean",
+                                    "description": "제한 여부"
+                                  },
+                                  "min": {
+                                    "type": "number",
+                                    "description": "최소값"
+                                  },
+                                  "max": {
+                                    "type": "number",
+                                    "description": "최대값"
+                                  },
+                                  "multi": {
+                                    "type": "boolean",
+                                    "description": "다중 선택 여부"
+                                  },
+                                  "placeholder": {
+                                    "type": "string",
+                                    "description": "플레이스홀더"
+                                  },
+                                  "showNumber": {
+                                    "type": "boolean",
+                                    "description": "숫자 표시 여부"
+                                  }
+                                },
+                                "required": [
+                                  "id",
+                                  "type"
+                                ],
+                                "description": "Number 커스텀 필드"
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "id": {
+                                    "type": "string",
+                                    "description": "id"
+                                  },
+                                  "type": {
+                                    "type": "string",
+                                    "enum": [
+                                      "text",
+                                      "long-text",
+                                      "number",
+                                      "checkbox",
+                                      "multi-checkbox",
+                                      "select",
+                                      "multi-select",
+                                      "choice",
+                                      "person",
+                                      "date",
+                                      "email",
+                                      "phone",
+                                      "url",
+                                      "rating",
+                                      "vote",
+                                      "relation",
+                                      "duration",
+                                      "file",
+                                      "image",
+                                      "formula",
+                                      "rollup",
+                                      "status",
+                                      "category",
+                                      "assignee",
+                                      "id",
+                                      "created-by",
+                                      "created-at",
+                                      "updated-at",
+                                      "device-id",
+                                      "ip-address",
+                                      "started-at",
+                                      "submitted-at",
+                                      "completion-time"
+                                    ],
+                                    "description": "커스텀 필드 타입"
+                                  },
+                                  "name": {
+                                    "type": "string",
+                                    "description": "이름"
+                                  },
+                                  "restricted": {
+                                    "type": "boolean",
+                                    "description": "제한 여부"
+                                  },
+                                  "deleted": {
+                                    "type": "boolean",
+                                    "description": "삭제 여부"
+                                  },
+                                  "required": {
+                                    "type": "boolean",
+                                    "description": "필수 여부"
+                                  },
+                                  "blockTitleId": {
+                                    "type": "string",
+                                    "description": "블럭 타이틀 id"
+                                  },
+                                  "blockIndex": {
+                                    "type": "number",
+                                    "description": "블럭 인덱스"
+                                  },
+                                  "responseCount": {
+                                    "type": "number",
+                                    "description": "응답 갯수"
+                                  },
+                                  "placeholder": {
+                                    "type": "string",
+                                    "description": "플레이스홀더"
+                                  },
+                                  "min": {
+                                    "type": "number",
+                                    "description": "최소값"
+                                  },
+                                  "max": {
+                                    "type": "number",
+                                    "description": "최대값"
+                                  },
+                                  "multi": {
+                                    "type": "boolean",
+                                    "description": "다중 선택 여부"
+                                  },
+                                  "fileAttachments": {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "object",
+                                      "properties": {
+                                        "id": {
+                                          "type": "string",
+                                          "description": "이미지 ID"
+                                        },
+                                        "imageKey": {
+                                          "type": "string",
+                                          "description": "원본 이미지에 대한 S3 Upload Key"
+                                        },
+                                        "path": {
+                                          "type": "string",
+                                          "description": "cdn 경로"
+                                        },
+                                        "status": {
+                                          "type": "string",
+                                          "description": "미디어 상태 - UPLOAD_IMAGE_STATUS 참고"
+                                        },
+                                        "mimeType": {
+                                          "type": "string",
+                                          "description": "마입타입"
+                                        },
+                                        "filename": {
+                                          "type": "string",
+                                          "description": "파일 이름"
+                                        }
+                                      },
+                                      "required": [
+                                        "imageKey",
+                                        "path"
+                                      ]
+                                    },
+                                    "description": "파일 첨부"
+                                  },
+                                  "showPreview": {
+                                    "type": "boolean",
+                                    "description": "미리보기 표시 여부"
+                                  },
+                                  "sizePerFile": {
+                                    "type": "number",
+                                    "description": "파일 개당 사이즈"
+                                  },
+                                  "fileExtensions": {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "string"
+                                    },
+                                    "description": "허용된 파일 확장장 타입"
+                                  }
+                                },
+                                "required": [
+                                  "id",
+                                  "type"
+                                ],
+                                "description": "File Attachment 커스텀 필드"
+                              }
+                            ]
+                          }
+                        },
+                        "createdAt": {
+                          "type": "string",
+                          "format": "date"
+                        },
+                        "updatedAt": {
+                          "type": "string",
+                          "format": "date"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "name",
+                        "description",
+                        "fields",
+                        "createdAt",
+                        "updatedAt"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "channel"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "enum": [
+                        "error"
+                      ]
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "message"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "enum": [
+                        "error"
+                      ]
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "message"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "enum": [
+                        "error"
+                      ]
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "message"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "enum": [
+                        "error"
+                      ]
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "message"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/post/:id": {
+      "get": {
+        "tags": [
+          "Posts"
+        ],
+        "description": "Get a post by id",
+        "summary": "Get a post",
+        "parameters": [
+          {
+            "name": "Accept",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "application/json"
+              ]
+            },
+            "example": "application/json"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "example": "POST_ID"
+            },
+            "required": true,
+            "name": "id",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "post",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "enum": [
+                        "success"
+                      ]
+                    },
+                    "channel": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "description": {
+                          "type": "string"
+                        },
+                        "createdAt": {
+                          "type": "string",
+                          "format": "date"
+                        },
+                        "updatedAt": {
+                          "type": "string",
+                          "format": "date"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "name",
+                        "description",
+                        "createdAt",
+                        "updatedAt"
+                      ],
+                      "additionalProperties": false
+                    },
+                    "post": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "title": {
+                          "type": "string"
+                        },
+                        "content": {
+                          "type": "string"
+                        },
+                        "fields": {
+                          "type": "object",
+                          "additionalProperties": {
+                            "anyOf": [
+                              {
+                                "type": "string",
+                                "description": "Value of text field",
+                                "example": "Text value"
+                              },
+                              {
+                                "type": "number",
+                                "description": "Value of number field",
+                                "example": 77
+                              },
+                              {
+                                "type": "boolean",
+                                "description": "Value of checkbox field",
+                                "example": true
+                              },
+                              {
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                },
+                                "description": "Value of select field",
+                                "examples": [
+                                  [
+                                    "selectOptionId1"
+                                  ],
+                                  [
+                                    "multiSelectOptionId1",
+                                    "multiSelectOptionId2"
+                                  ],
+                                  [
+                                    "userId1",
+                                    "userId2"
+                                  ],
+                                  [
+                                    "fileId1",
+                                    "fileId2"
+                                  ]
+                                ]
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "date": {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "string",
+                                      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+                                    }
+                                  },
+                                  "hasTime": {
+                                    "type": "boolean"
+                                  },
+                                  "timeZone": {
+                                    "type": "string"
+                                  },
+                                  "backgroundColor": {
+                                    "type": "string"
+                                  }
+                                },
+                                "description": "Value of date field",
+                                "examples": [
+                                  {
+                                    "date": [
+                                      "2021-01-01"
+                                    ],
+                                    "hasTime": true,
+                                    "timeZone": "Asia/Seoul"
+                                  }
+                                ]
+                              }
+                            ]
+                          },
+                          "description": "A map of field. See examples below."
+                        },
+                        "createdAt": {
+                          "type": "string",
+                          "format": "date"
+                        },
+                        "updatedAt": {
+                          "type": "string",
+                          "format": "date"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "title",
+                        "content",
+                        "fields",
+                        "createdAt",
+                        "updatedAt"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "channel",
+                    "post"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "enum": [
+                        "error"
+                      ]
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "message"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "enum": [
+                        "error"
+                      ]
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "message"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "enum": [
+                        "error"
+                      ]
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "message"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "enum": [
+                        "error"
+                      ]
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "message"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Posts"
+        ],
+        "summary": "Update a post",
+        "description": "Update a post by id",
+        "parameters": [
+          {
+            "name": "Accept",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "application/json"
+              ]
+            },
+            "example": "application/json"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "example": "POST_ID"
+            },
+            "required": true,
+            "name": "id",
+            "in": "path"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string"
+                  },
+                  "content": {
+                    "type": "string"
+                  },
+                  "fields": {
+                    "type": "object",
+                    "additionalProperties": {
+                      "anyOf": [
+                        {
+                          "type": "string",
+                          "description": "Value of text field",
+                          "example": "Text value"
+                        },
+                        {
+                          "type": "number",
+                          "description": "Value of number field",
+                          "example": 77
+                        },
+                        {
+                          "type": "boolean",
+                          "description": "Value of checkbox field",
+                          "example": true
+                        },
+                        {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          },
+                          "description": "Value of select field",
+                          "examples": [
+                            [
+                              "selectOptionId1"
+                            ],
+                            [
+                              "multiSelectOptionId1",
+                              "multiSelectOptionId2"
+                            ],
+                            [
+                              "userId1",
+                              "userId2"
+                            ],
+                            [
+                              "fileId1",
+                              "fileId2"
+                            ]
+                          ]
+                        },
+                        {
+                          "type": "object",
+                          "properties": {
+                            "date": {
+                              "type": "array",
+                              "items": {
+                                "type": "string",
+                                "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+                              }
+                            },
+                            "hasTime": {
+                              "type": "boolean"
+                            },
+                            "timeZone": {
+                              "type": "string"
+                            },
+                            "backgroundColor": {
+                              "type": "string"
+                            }
+                          },
+                          "description": "Value of date field",
+                          "examples": [
+                            {
+                              "date": [
+                                "2021-01-01"
+                              ],
+                              "hasTime": true,
+                              "timeZone": "Asia/Seoul"
+                            }
+                          ]
+                        }
+                      ]
+                    }
                   }
                 }
               }
             }
-          },
-          "400": {
-            "description": "Unexpected error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
           }
-        }
-      },
-      "post": {
-        "description": "Creates a new plant in the store",
-        "requestBody": {
-          "description": "Plant to add to the store",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/NewPlant"
-              }
-            }
-          },
-          "required": true
         },
         "responses": {
           "200": {
-            "description": "plant response",
+            "description": "post",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Plant"
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "enum": [
+                        "success"
+                      ]
+                    },
+                    "channel": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "description": {
+                          "type": "string"
+                        },
+                        "createdAt": {
+                          "type": "string",
+                          "format": "date"
+                        },
+                        "updatedAt": {
+                          "type": "string",
+                          "format": "date"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "name",
+                        "description",
+                        "createdAt",
+                        "updatedAt"
+                      ],
+                      "additionalProperties": false
+                    },
+                    "post": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "title": {
+                          "type": "string"
+                        },
+                        "content": {
+                          "type": "string"
+                        },
+                        "fields": {
+                          "type": "object",
+                          "additionalProperties": {
+                            "anyOf": [
+                              {
+                                "type": "string",
+                                "description": "Value of text field",
+                                "example": "Text value"
+                              },
+                              {
+                                "type": "number",
+                                "description": "Value of number field",
+                                "example": 77
+                              },
+                              {
+                                "type": "boolean",
+                                "description": "Value of checkbox field",
+                                "example": true
+                              },
+                              {
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                },
+                                "description": "Value of select field",
+                                "examples": [
+                                  [
+                                    "selectOptionId1"
+                                  ],
+                                  [
+                                    "multiSelectOptionId1",
+                                    "multiSelectOptionId2"
+                                  ],
+                                  [
+                                    "userId1",
+                                    "userId2"
+                                  ],
+                                  [
+                                    "fileId1",
+                                    "fileId2"
+                                  ]
+                                ]
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "date": {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "string",
+                                      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+                                    }
+                                  },
+                                  "hasTime": {
+                                    "type": "boolean"
+                                  },
+                                  "timeZone": {
+                                    "type": "string"
+                                  },
+                                  "backgroundColor": {
+                                    "type": "string"
+                                  }
+                                },
+                                "description": "Value of date field",
+                                "examples": [
+                                  {
+                                    "date": [
+                                      "2021-01-01"
+                                    ],
+                                    "hasTime": true,
+                                    "timeZone": "Asia/Seoul"
+                                  }
+                                ]
+                              }
+                            ]
+                          },
+                          "description": "A map of field. See examples below."
+                        },
+                        "createdAt": {
+                          "type": "string",
+                          "format": "date"
+                        },
+                        "updatedAt": {
+                          "type": "string",
+                          "format": "date"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "title",
+                        "content",
+                        "fields",
+                        "createdAt",
+                        "updatedAt"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "channel",
+                    "post"
+                  ]
                 }
               }
             }
           },
           "400": {
-            "description": "unexpected error",
+            "description": "Bad request",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "enum": [
+                        "error"
+                      ]
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "message"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "enum": [
+                        "error"
+                      ]
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "message"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "enum": [
+                        "error"
+                      ]
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "message"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "enum": [
+                        "error"
+                      ]
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "message"
+                  ],
+                  "additionalProperties": false
                 }
               }
             }
@@ -96,32 +4499,669 @@
         }
       }
     },
-    "/plants/{id}": {
-      "delete": {
-        "description": "Deletes a single plant based on the ID supplied",
+    "/channel/:id/posts": {
+      "get": {
+        "tags": [
+          "Channels",
+          "Posts"
+        ],
+        "summary": "List posts",
+        "description": "List all posts of a channel",
         "parameters": [
           {
-            "name": "id",
-            "in": "path",
-            "description": "ID of plant to delete",
+            "name": "Accept",
+            "in": "header",
             "required": true,
             "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
+              "type": "string",
+              "enum": [
+                "application/json"
+              ]
+            },
+            "example": "application/json"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "example": "CHANNEL_ID"
+            },
+            "required": true,
+            "name": "id",
+            "in": "path"
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "required": false,
+            "name": "cursor",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "number",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 10
+            },
+            "required": false,
+            "name": "limit",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "enum": [
+                "asc",
+                "desc"
+              ],
+              "default": "desc"
+            },
+            "required": false,
+            "name": "orderBy",
+            "in": "query"
           }
         ],
         "responses": {
-          "204": {
-            "description": "Plant deleted",
-            "content": {}
-          },
-          "400": {
-            "description": "unexpected error",
+          "200": {
+            "description": "Object with channel posts.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "type": "object",
+                  "properties": {
+                    "hasMore": {
+                      "type": "boolean"
+                    },
+                    "cursor": {
+                      "type": "string"
+                    },
+                    "limit": {
+                      "type": "number"
+                    },
+                    "status": {
+                      "type": "string",
+                      "enum": [
+                        "success"
+                      ]
+                    },
+                    "channel": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "description": {
+                          "type": "string"
+                        },
+                        "createdAt": {
+                          "type": "string",
+                          "format": "date"
+                        },
+                        "updatedAt": {
+                          "type": "string",
+                          "format": "date"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "name",
+                        "description",
+                        "createdAt",
+                        "updatedAt"
+                      ],
+                      "additionalProperties": false
+                    },
+                    "posts": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "title": {
+                            "type": "string"
+                          },
+                          "content": {
+                            "type": "string"
+                          },
+                          "fields": {
+                            "type": "object",
+                            "additionalProperties": {
+                              "anyOf": [
+                                {
+                                  "type": "string",
+                                  "description": "Value of text field",
+                                  "example": "Text value"
+                                },
+                                {
+                                  "type": "number",
+                                  "description": "Value of number field",
+                                  "example": 77
+                                },
+                                {
+                                  "type": "boolean",
+                                  "description": "Value of checkbox field",
+                                  "example": true
+                                },
+                                {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string"
+                                  },
+                                  "description": "Value of select field",
+                                  "examples": [
+                                    [
+                                      "selectOptionId1"
+                                    ],
+                                    [
+                                      "multiSelectOptionId1",
+                                      "multiSelectOptionId2"
+                                    ],
+                                    [
+                                      "userId1",
+                                      "userId2"
+                                    ],
+                                    [
+                                      "fileId1",
+                                      "fileId2"
+                                    ]
+                                  ]
+                                },
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "date": {
+                                      "type": "array",
+                                      "items": {
+                                        "type": "string",
+                                        "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+                                      }
+                                    },
+                                    "hasTime": {
+                                      "type": "boolean"
+                                    },
+                                    "timeZone": {
+                                      "type": "string"
+                                    },
+                                    "backgroundColor": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "description": "Value of date field",
+                                  "examples": [
+                                    {
+                                      "date": [
+                                        "2021-01-01"
+                                      ],
+                                      "hasTime": true,
+                                      "timeZone": "Asia/Seoul"
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            "description": "A map of field. See examples below."
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "format": "date"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "format": "date"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "title",
+                          "content",
+                          "fields",
+                          "createdAt",
+                          "updatedAt"
+                        ],
+                        "additionalProperties": false
+                      }
+                    }
+                  },
+                  "required": [
+                    "hasMore",
+                    "cursor",
+                    "limit",
+                    "status",
+                    "channel",
+                    "posts"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "enum": [
+                        "error"
+                      ]
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "message"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "enum": [
+                        "error"
+                      ]
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "message"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "enum": [
+                        "error"
+                      ]
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "message"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "enum": [
+                        "error"
+                      ]
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "message"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/channel/:id/post": {
+      "post": {
+        "tags": [
+          "Channels",
+          "Posts"
+        ],
+        "summary": "Write a post",
+        "description": "### Write a post on channel\ntest\n                ",
+        "parameters": [
+          {
+            "name": "Accept",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "application/json"
+              ]
+            },
+            "example": "application/json"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "example": "CHANNEL_ID"
+            },
+            "required": true,
+            "name": "id",
+            "in": "path"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string"
+                  },
+                  "markdown": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "title",
+                  "markdown"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Created post id",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "enum": [
+                        "success"
+                      ]
+                    },
+                    "channel": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "description": {
+                          "type": "string"
+                        },
+                        "createdAt": {
+                          "type": "string",
+                          "format": "date"
+                        },
+                        "updatedAt": {
+                          "type": "string",
+                          "format": "date"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "name",
+                        "description",
+                        "createdAt",
+                        "updatedAt"
+                      ],
+                      "additionalProperties": false
+                    },
+                    "post": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "title": {
+                          "type": "string"
+                        },
+                        "content": {
+                          "type": "string"
+                        },
+                        "fields": {
+                          "type": "object",
+                          "additionalProperties": {
+                            "anyOf": [
+                              {
+                                "type": "string",
+                                "description": "Value of text field",
+                                "example": "Text value"
+                              },
+                              {
+                                "type": "number",
+                                "description": "Value of number field",
+                                "example": 77
+                              },
+                              {
+                                "type": "boolean",
+                                "description": "Value of checkbox field",
+                                "example": true
+                              },
+                              {
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                },
+                                "description": "Value of select field",
+                                "examples": [
+                                  [
+                                    "selectOptionId1"
+                                  ],
+                                  [
+                                    "multiSelectOptionId1",
+                                    "multiSelectOptionId2"
+                                  ],
+                                  [
+                                    "userId1",
+                                    "userId2"
+                                  ],
+                                  [
+                                    "fileId1",
+                                    "fileId2"
+                                  ]
+                                ]
+                              },
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "date": {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "string",
+                                      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+                                    }
+                                  },
+                                  "hasTime": {
+                                    "type": "boolean"
+                                  },
+                                  "timeZone": {
+                                    "type": "string"
+                                  },
+                                  "backgroundColor": {
+                                    "type": "string"
+                                  }
+                                },
+                                "description": "Value of date field",
+                                "examples": [
+                                  {
+                                    "date": [
+                                      "2021-01-01"
+                                    ],
+                                    "hasTime": true,
+                                    "timeZone": "Asia/Seoul"
+                                  }
+                                ]
+                              }
+                            ]
+                          },
+                          "description": "A map of field. See examples below."
+                        },
+                        "createdAt": {
+                          "type": "string",
+                          "format": "date"
+                        },
+                        "updatedAt": {
+                          "type": "string",
+                          "format": "date"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "title",
+                        "content",
+                        "fields",
+                        "createdAt",
+                        "updatedAt"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "channel",
+                    "post"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "enum": [
+                        "error"
+                      ]
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "message"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "enum": [
+                        "error"
+                      ]
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "message"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "enum": [
+                        "error"
+                      ]
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "message"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "enum": [
+                        "error"
+                      ]
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "message"
+                  ],
+                  "additionalProperties": false
                 }
               }
             }
@@ -130,88 +5170,5 @@
       }
     }
   },
-  "webhooks": {
-    "/plant/webhook": {
-      "post": {
-        "description": "Information about a new plant added to the store",
-        "requestBody": {
-          "description": "Plant added to the store",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/NewPlant"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Return a 200 status to indicate that the data was received successfully"
-          }
-        }
-      }
-    }
-  },
-  "components": {
-    "schemas": {
-      "Plant": {
-        "required": [
-          "name"
-        ],
-        "type": "object",
-        "properties": {
-          "name": {
-            "description": "The name of the plant",
-            "type": "string"
-          },
-          "tag": {
-            "description": "Tag to specify the type",
-            "type": "string"
-          }
-        }
-      },
-      "NewPlant": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/Plant"
-          },
-          {
-            "required": [
-              "id"
-            ],
-            "type": "object",
-            "properties": {
-              "id": {
-                "description": "Identification number of the plant",
-                "type": "integer",
-                "format": "int64"
-              }
-            }
-          }
-        ]
-      },
-      "Error": {
-        "required": [
-          "error",
-          "message"
-        ],
-        "type": "object",
-        "properties": {
-          "error": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "message": {
-            "type": "string"
-          }
-        }
-      }
-    },
-    "securitySchemes": {
-      "bearerAuth": {
-        "type": "http",
-        "scheme": "bearer"
-      }
-    }
-  }
+  "webhooks": {}
 }
